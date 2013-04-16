@@ -4,3 +4,9 @@
 	issued  2013-04-16;
 	label   "Developer preview".
 
+`Type-Params 0.000_02 cpan:TOBYINK`
+	issued  2013-04-16;
+	changeset [
+		item "List dependencies."^^Packaging;
+	].
+
