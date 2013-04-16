@@ -8,8 +8,8 @@
 	:homepage             <https://metacpan.org/release/Type-Params>;
 	:download-page        <https://metacpan.org/release/Type-Params>;
 	:bug-database         <http://rt.cpan.org/Dist/Display.html?Queue=Type-Params>;
-#	:repository           [ a :HgRepository; :browse <https://bitbucket.org/tobyink/p5-type-params> ];
-	:created              2013-04-16;
+	:repository           [ a :HgRepository; :browse <https://bitbucket.org/tobyink/p5-type-params> ];
+	:created              2013-04-10;
 	:license              <http://dev.perl.org/licenses/>;
 	:maintainer           cpan:TOBYINK;
 	:developer            cpan:TOBYINK.
