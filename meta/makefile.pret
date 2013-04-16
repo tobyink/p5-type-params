@@ -1,0 +1,8 @@
+# This file provides instructions for packaging.
+
+`Type-Params`
+	perl_version_from m`Type::Params`;
+	version_from      m`Type::Params`;
+	readme_from       m`Type::Params` ;
+	.
+
