@@ -230,6 +230,16 @@ Type::Params has a few tricks up its sleeve to make sure performance doesn't
 suffer too much with the shortcut, but it's never going to be as fast as the
 two stage compile/execute.
 
+=begin trustme
+
+Dude, these functions are documented!
+
+=item compile
+
+=item validate
+
+=end trustme
+
 =head1 COOKBOOK
 
 =head2 Positional Parameters
