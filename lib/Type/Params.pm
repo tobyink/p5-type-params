@@ -102,7 +102,7 @@ sub compile
 		if ($constraint->can_be_inlined)
 		{
 			push @code, sprintf(
-				'(%s) or $croaker->("Value \\"%s\\" in $_[%d] does not meet type constraint \\"%s\\"");',
+				'(%s) or $croaker->("Value \\"%s\\" in \\$_[%d] does not meet type constraint \\"%s\\"");',
 				$constraint->inline_check($varname),
 				$varname,
 				$arg,
@@ -113,7 +113,7 @@ sub compile
 		{
 			$env{'@check'}[$arg] = $constraint->compiled_check;
 			push @code, sprintf(
-				'%s or $croaker->("Value \\"%s\\" in $_[%d] does not meet type constraint \\"%s\\"");',
+				'%s or $croaker->("Value \\"%s\\" in \\$_[%d] does not meet type constraint \\"%s\\"");',
 				sprintf(sprintf '$check[%d]->(%s)', $arg, $varname),
 				$varname,
 				$arg,
