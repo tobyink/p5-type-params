@@ -15,9 +15,8 @@ use Scalar::Util qw(refaddr);
 use Types::Standard -types;
 use Types::TypeTiny qw(to_TypeTiny);
 
-use Sub::Exporter::Progressive -setup => {
-	exports  => ['compile', 'validate'],
-};
+our @EXPORT = qw( compile validate );
+use base qw< Exporter::TypeTiny >;
 
 sub _mkslurpy
 {
