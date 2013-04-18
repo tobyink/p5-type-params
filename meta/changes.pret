@@ -10,3 +10,9 @@
 		item "List dependencies."^^Packaging;
 	].
 
+`Type-Params 0.000_03 cpan:TOBYINK`
+	issued  2013-04-18;
+	changeset [
+		item "use Exporter::TypeTiny for exporting functions."^^Change;
+	].
+
