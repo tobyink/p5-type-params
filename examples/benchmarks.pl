@@ -14,11 +14,23 @@ use Types::Standard qw( -types );
 BEGIN { $ENV{PARAMS_VALIDATE_IMPLEMENTATION} = 'XS' }; # ... which we'll give a fighting chance
 use Params::Validate qw( validate_pos ARRAYREF SCALAR );
 
+# ... and Data::Validator...
+use Data::Validator ();
+use Mouse::Util::TypeConstraints ();
+
 # Define custom type constraints...
 my $PrintAndSay = duck_type PrintAndSay => ["print", "say"];
 my $SmallInt    = declare SmallInt => as Int,
 	where     { $_ < 90 },
 	inline_as { $_[0]->parent->inline_check($_)." and $_ < 90" };
+
+# ... and for Mouse...
+my $PrintAndSay2 = Mouse::Util::TypeConstraints::duck_type(PrintAndSay => ["print", "say"]);
+my $SmallInt2 = Mouse::Util::TypeConstraints::subtype(
+	"SmallInt",
+	Mouse::Util::TypeConstraints::as("Int"),
+	Mouse::Util::TypeConstraints::where(sub { $_ < 90 }),
+);
 
 sub TypeParams_validate
 {
@@ -41,6 +53,16 @@ sub ParamsValidate
 	my @in = validate_pos(@_, @$spec);
 }
 
+sub DataValidator
+{
+	state $spec = "Data::Validator"->new(
+		first  => "ArrayRef",
+		second => $PrintAndSay2,
+		third  => $SmallInt2,
+	)->with("StrictSequenced");
+	my @in = $spec->validate(@_);
+}
+
 # Actually run the benchmarks...
 #
 
@@ -52,13 +74,15 @@ our @data = (
 );
 
 cmpthese(-3, {
-	'Type::Params compile'   => q{ TypeParams_compile(@::data) },
-	'Params::Validate'       => q{ ParamsValidate(@::data) },
-	'Type::Params validate'  => q{ TypeParams_validate(@::data) },
+	'[D:V]'    => q{ DataValidator(@::data) },
+	'[P:V]'    => q{ ParamsValidate(@::data) },
+	'[T:P v]'  => q{ TypeParams_validate(@::data) },
+	'[T:P c]'  => q{ TypeParams_compile(@::data) },
 });
 
 __END__
-                         Rate Params::Validate Type::Params validate Type::Params compile
-Params::Validate      11550/s               --                  -40%                 -64%
-Type::Params validate 19185/s              66%                    --                 -40%
-Type::Params compile  32036/s             177%                   67%                   --
+           Rate   [D:V]   [P:V] [T:P v] [T:P c]
+[D:V]    9922/s      --    -19%    -49%    -71%
+[P:V]   12215/s     23%      --    -37%    -64%
+[T:P v] 19319/s     95%     58%      --    -44%
+[T:P c] 34279/s    246%    181%     77%      --
