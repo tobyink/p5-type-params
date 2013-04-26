@@ -16,3 +16,10 @@
 		item "use Exporter::TypeTiny for exporting functions."^^Change;
 	].
 
+`Type-Params 0.000_04 cpan:TOBYINK`
+	issued  2013-04-26;
+	changeset [
+		item "Include some trickery in Makefile.PL to pull in the latest dev release for Type-Tiny, providing better CPAN testers reports."^^Change;
+		item "Benchmarking script now also compares with Data::Validator."^^Addition;
+	].
+
