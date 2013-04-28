@@ -18,6 +18,9 @@ use Params::Validate qw( validate_pos ARRAYREF SCALAR );
 use Data::Validator ();
 use Mouse::Util::TypeConstraints ();
 
+# ... and Params::Check...
+use Params::Check ();
+
 # Define custom type constraints...
 my $PrintAndSay = duck_type PrintAndSay => ["print", "say"];
 my $SmallInt    = declare SmallInt => as Int,
@@ -53,6 +56,22 @@ sub ParamsValidate
 	my @in = validate_pos(@_, @$spec);
 }
 
+sub ParamsCheck
+{
+	state $spec = [
+		[sub { ref $_[0] eq 'ARRAY' }],
+		[sub { Scalar::Util::blessed($_[0]) and $_[0]->can("print") and $_[0]->can("say") }],
+		[sub { !ref($_[0]) and $_[0] =~ m{^\d+$} and $_[0] < 90 }],
+	];
+	# Params::Check::check doesn't support positional parameters.
+	# Params::Check::allow fakery instead.
+	my @in = map {
+		Params::Check::allow($_[$_], $spec->[$_])
+			? $_[$_]
+			: die
+	} 0..$#$spec;
+}
+
 sub DataValidator
 {
 	state $spec = "Data::Validator"->new(
@@ -76,13 +95,15 @@ our @data = (
 cmpthese(-3, {
 	'[D:V]'    => q{ DataValidator(@::data) },
 	'[P:V]'    => q{ ParamsValidate(@::data) },
+	'[P:C]'    => q{ ParamsCheck(@::data) },
 	'[T:P v]'  => q{ TypeParams_validate(@::data) },
 	'[T:P c]'  => q{ TypeParams_compile(@::data) },
 });
 
 __END__
-           Rate   [D:V]   [P:V] [T:P v] [T:P c]
-[D:V]    9922/s      --    -19%    -49%    -71%
-[P:V]   12215/s     23%      --    -37%    -64%
-[T:P v] 19319/s     95%     58%      --    -44%
-[T:P c] 34279/s    246%    181%     77%      --
+           Rate   [D:V]   [P:V]   [P:C] [T:P v] [T:P c]
+[D:V]   10114/s      --    -16%    -38%    -47%    -71%
+[P:V]   12027/s     19%      --    -27%    -37%    -66%
+[P:C]   16432/s     62%     37%      --    -14%    -54%
+[T:P v] 19123/s     89%     59%     16%      --    -46%
+[T:P c] 35430/s    250%    195%    116%     85%      --
