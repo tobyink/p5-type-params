@@ -23,3 +23,12 @@
 		item "Benchmarking script now also compares with Data::Validator."^^Addition;
 	].
 
+`Type-Params 0.000_05 cpan:TOBYINK`
+	issued  2013-04-26;
+	changeset [
+		item "Fixed validation of slurpy hash lengths."^^Bugfix;
+		item "Bigger, better test suite."^^Packaging;
+		item "Benchmarking script now also compares with Params::Check."^^Addition;
+		item "Minor corrections."^^Documentation;
+	].
+
