@@ -32,10 +32,11 @@ sub _mkslurpy
 			$i,
 		)
 		: sprintf(
-			'%s = $#_-%d==0 ? $croaker->("Odd number of elements in %s") : +{ @_[%d..$#_] };',
+			'%s = (($#_-%d)%%2)==0 ? $croaker->("Odd number of elements in %s") : +{ @_[%d..$#_] };',
 			$name,
 			$i,
 			$tc,
+			$i,
 			$i,
 		);
 }
@@ -61,11 +62,11 @@ sub compile
 		{
 			$constraint = to_TypeTiny($constraint->{slurpy});
 			push @code,
-				$constraint->is_a_type_of(HashRef)  ? _mkslurpy('$_', '%', HashRef  => $arg) :
 				$constraint->is_a_type_of(Dict)     ? _mkslurpy('$_', '%', Dict     => $arg) :
 				$constraint->is_a_type_of(Map)      ? _mkslurpy('$_', '%', Map      => $arg) :
-				$constraint->is_a_type_of(ArrayRef) ? _mkslurpy('$_', '@', ArrayRef => $arg) :
 				$constraint->is_a_type_of(Tuple)    ? _mkslurpy('$_', '@', Tuple    => $arg) :
+				$constraint->is_a_type_of(HashRef)  ? _mkslurpy('$_', '%', HashRef  => $arg) :
+				$constraint->is_a_type_of(ArrayRef) ? _mkslurpy('$_', '@', ArrayRef => $arg) :
 				croak("Slurpy parameter not of type HashRef or ArrayRef");
 			$varname = '$_';
 		}
@@ -240,6 +241,8 @@ Dude, these functions are documented!
 =item compile
 
 =item validate
+
+=item Invocant
 
 =end trustme
 
