@@ -384,7 +384,7 @@ a coercion associated.
    use Types::Standard qw( Int Num );
    
    my $RoundedInt = declare as Int;
-   coerce $RoundedInt, from Num, via q{ int($_) };
+   coerce $RoundedInt, from Num, q{ int($_) };
    
    sub set_age
    {
