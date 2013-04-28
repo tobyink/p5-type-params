@@ -6,7 +6,7 @@
 	readme_from       m`Type::Params`;
 	requires          p`Eval::Closure`;
 	requires          p`Type::Tiny 0.003_04`;
-	test_requires     p`Test::More 0.88`;
+	test_requires     p`Test::More 0.96`;
 	test_requires     p`Test::Fatal`;
 	.
 
