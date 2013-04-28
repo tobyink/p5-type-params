@@ -30,5 +30,6 @@
 		item "Bigger, better test suite."^^Packaging;
 		item "Benchmarking script now also compares with Params::Check."^^Addition;
 		item "Minor corrections."^^Documentation;
+		item "Added an 'Invocant' type constraint."^^Addition;
 	].
 
