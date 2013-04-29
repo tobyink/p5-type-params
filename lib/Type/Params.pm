@@ -10,15 +10,15 @@ BEGIN {
 }
 
 use Carp qw(croak);
-use Eval::Closure qw();
+use Eval::TypeTiny;
 use Scalar::Util qw(refaddr);
 use Types::Standard -types;
 use Type::Utils;
 use Types::TypeTiny qw(to_TypeTiny);
 
+use base qw< Exporter::TypeTiny >;
 our @EXPORT = qw( compile );
 our @EXPORT_OK = qw( validate Invocant );
-use base qw< Exporter::TypeTiny >;
 
 use constant Invocant => union Invocant => [Object, ClassName];
 
@@ -133,7 +133,7 @@ sub compile
 	my $comment = sprintf('line 0 "parameter validation for %s"', [caller 1]->[3]);
 	my $source  = "# $comment\nsub { no warnings; ".join("\n", @code)." };";
 	
-	return Eval::Closure::eval_closure(
+	return eval_closure(
 		source      => $source,
 		environment => \%env,
 	);
